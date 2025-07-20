@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow - Verify Identity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-900 text-white min-h-screen flex items-center justify-center font-sans">
+
+  <div class="w-full max-w-md p-6 bg-neutral-800 rounded-xl shadow-lg text-center">
+    <div class="mb-6">
+      <div class="text-4xl mb-2">🛡️</div>
+      <h1 class="text-2xl font-bold">TaskFlow</h1>
+      <p class="text-gray-400 text-sm">Your Personal Productivity Companion</p>
+    </div>
+
+    <form onsubmit="verifyUser(event)" class="space-y-4">
+      <div>
+        <label class="block text-left text-sm text-gray-300">Full Name</label>
+        <input type="text" id="fullName"
+               class="w-full mt-1 p-2 rounded bg-neutral-700 text-white placeholder:text-gray-400 border border-gray-600"
+               placeholder="Enter your full name" required />
+      </div>
+      <div>
+        <label class="block text-left text-sm text-gray-300">Date of Birth</label>
+        <input type="date" id="dob"
+               class="w-full mt-1 p-2 rounded bg-neutral-700 text-white border border-gray-600" required />
+      </div>
+      <p id="errorMsg" class="text-red-500 text-sm"></p>
+      <button type="submit"
+              class="w-full py-2 bg-white text-black font-semibold rounded hover:bg-gray-200 transition">
+        Verify & Continue
+      </button>
+    </form>
+
+    <p class="text-xs text-gray-500 mt-6">
+      By continuing, you confirm that you are over 10 years old and agree to our terms of service.
+    </p>
+  </div>
+
+  <script>
+    function calculateAge(dob) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function verifyUser(e) {
+  e.preventDefault();
+  const name = document.getElementById("fullName").value.trim();
+  const dob = document.getElementById("dob").value;
+  const error = document.getElementById("errorMsg");
+
+  error.textContent = "";
+
+  // Name and DOB validation
+  if (!name || !dob) {
+    error.textContent = "Please fill in all fields.";
+    return;
+  }
+
+  // Alphabetic name validation
+  const nameRegex = /^[A-Za-z\s]+$/;
+  if (!nameRegex.test(name)) {
+    error.textContent = "Name must contain only letters and spaces.";
+    return;
+  }
+
+  // Age check
+  const age = calculateAge(dob);
+  if (age < 11) {
+    error.textContent = "You must be over 10 years old to continue.";
+    return;
+  }
+
+  // All good – save and redirect
+  localStorage.setItem("taskflow_user", JSON.stringify({ name, dob }));
+  window.location.href = "app.html";
+}
+
+
+    // Auto-redirect if user exists
+    window.onload = () => {
+      const user = JSON.parse(localStorage.getItem("taskflow_user"));
+      if (user) window.location.href = "app.html";
+    };
+  </script>
+</body>
+</html>

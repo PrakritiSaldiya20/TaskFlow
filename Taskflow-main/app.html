@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow - Todo App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-900 text-white min-h-screen font-sans">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center p-4 bg-neutral-800 shadow">
+    <div class="flex items-center gap-4">
+      <img id="avatar" class="w-10 h-10 rounded-full" />
+      <span id="userName" class="text-lg font-semibold"></span>
+    </div>
+    <button onclick="signOut()" class="bg-neutral-700 text-white px-4 py-1 rounded hover:bg-neutral-600">Sign Out</button>
+  </header>
+
+  <!-- Tabs -->
+  <div class="flex justify-center mt-4 gap-4">
+    <button id="tab-todo"
+      onclick="switchTab('todo')"
+      class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
+      Todo (<span id="countTodo">0</span>)
+    </button>
+
+    <button id="tab-completed"
+      onclick="switchTab('completed')"
+      class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
+      Completed (<span id="countCompleted">0</span>)
+    </button>
+
+    <button id="tab-archived"
+      onclick="switchTab('archived')"
+      class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
+      Archived (<span id="countArchived">0</span>)
+    </button>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="max-w-xl mx-auto mt-4 px-4">
+    <div class="flex justify-between mb-1 text-sm text-gray-300">
+      <span>Progress</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="w-full bg-gray-700 rounded-full h-3">
+      <div id="progressBar" class="bg-green-500 h-3 rounded-full transition-all duration-300" style="width: 0%;"></div>
+    </div>
+  </div>
+
+  <!-- Add Task -->
+  <div class="max-w-3xl mx-auto mt-6 flex">
+    <input id="taskInput" class="flex-grow p-2 rounded-l bg-neutral-800 text-white placeholder:text-gray-400 border border-r-0 border-gray-700" placeholder="Add your task..." />
+    <button onclick="addTask()" class="bg-white text-black px-4 rounded-r font-medium">Submit</button>
+  </div>
+
+  <!-- Task List -->
+  <div id="taskList" class="max-w-3xl mx-auto mt-6 space-y-4 px-4"></div>
+
+  <!-- Chatbot Icon -->
+  <div id="chatIcon"
+       class="fixed bottom-5 right-5 bg-white text-black p-4 rounded-full shadow hover:scale-110 transition cursor-pointer"
+       onclick="toggleChatbot()">💬</div>
+
+  <!-- Chatbot Box -->
+  <div id="chatbotContainer"
+       class="hidden fixed bottom-24 right-5 w-80 h-[400px] bg-neutral-800 rounded-xl shadow-xl flex flex-col p-3 text-sm space-y-2 z-50">
+    <div id="chatLog" class="flex-1 overflow-y-auto flex flex-col space-y-2 px-1 py-2 text-white text-sm"></div>
+    <div class="flex items-center gap-2">
+      <input type="text" id="chatInput" onkeydown="handleChat(event)"
+             class="flex-1 bg-neutral-700 p-2 rounded text-white outline-none placeholder:text-gray-400"
+             placeholder="Type your message..." />
+      <button onclick="startVoiceInput()" class="bg-white text-black px-3 py-1 rounded">🎙️</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="chatbot.js"></script>
+  <script src="script.js"></script>
+
+  <style>
+    #chatLog div {
+      max-width: 75%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      line-height: 1.4;
+    }
+    #chatLog .self-end {
+      align-self: flex-end;
+      background-color: #4b5563;
+    }
+    #chatLog .self-start {
+      align-self: flex-start;
+      background-color: #374151;
+    }
+  </style>
+</body>
+</html>
